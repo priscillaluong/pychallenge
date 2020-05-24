@@ -25,3 +25,14 @@ pokemon = response.json()
 poke_name = pokemon['name']
 print(poke_name.title() + '\n' + str(pokemon_number))
 
+# Create a dictionary that contains the returned Pokemon's name id, height and weight
+
+pokemon_dict = {
+    'name':poke_name.title(),
+    'id':pokemon_number,
+    'height':pokemon['height'],
+    'weight':pokemon['weight']
+}
+
+print(pokemon_dict)
+
