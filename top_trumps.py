@@ -23,5 +23,5 @@ url = 'https://pokeapi.co/api/v2/pokemon/{}/'.format(pokemon_number)
 response = requests.get(url)
 pokemon = response.json()
 poke_name = pokemon['name']
-print(poke_name)
+print(poke_name.title() + '\n' + str(pokemon_number))
 
