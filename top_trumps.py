@@ -30,11 +30,23 @@ def random_pokemon():
         'weight':pokemon['weight']
     }
 
-# Get a random Pokemon for the player and another for their opponent
+# Get five random Pokemons for the player to choose
 def get():
-    my_pokemon = random_pokemon()
-    print("Your pokemon is {} with ID: {}, height: {}, and weight: {}.".format(my_pokemon['name'].title(), my_pokemon['id'], my_pokemon['height'], my_pokemon['weight']))
+    def choose_pokemon():
+        for i in range(5):
+            get_pokemon = random_pokemon()
+            print(get_pokemon['name'].title())
+    choose_pokemon()
+    chosen_pokemon = input('Which pokemon would you like to choose? ')
 
+    import requests
+    url = 'https://pokeapi.co/api/v2/pokemon/{}/'.format(chosen_pokemon)
+    # print(url)
+    response = requests.get(url)
+    my_pokemon = response.json()
+    print("Your pokemon is {} with ID: {}, height: {}, and weight: {}.".format(my_pokemon['name'], my_pokemon['id'], my_pokemon['height'], my_pokemon['weight']))
+
+    # Get a random pokemon for the opponent
     opponents_pokemon = random_pokemon()
     print("The opponent's pokemon is: {}".format(opponents_pokemon['name'].title()))
 
