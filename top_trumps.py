@@ -9,3 +9,19 @@
 
 # The project will use the Pokemon API
 
+# Generate a random number between 1 and 151 to use as the Pokemon ID number
+
+import random
+pokemon_number = random.randint(1, 152)
+
+# Using the Pokemon API get a Pokemon based on its ID number
+
+import requests
+import json
+
+url = 'https://pokeapi.co/api/v2/pokemon/{}/'.format(pokemon_number)
+response = requests.get(url)
+pokemon = response.json()
+poke_name = pokemon['name']
+print(poke_name)
+
