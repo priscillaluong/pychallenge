@@ -9,29 +9,14 @@
 
 # The project will use the Pokemon API
 
-def random_pokemon():
-    # Generate a random number between 1 and 151 to use as the Pokemon ID number
-    import random
-    pokemon_number = random.randint(1, 152)
-    import requests
-    import json
+total_opponent_score = 0
+total_my_score = 0
 
-    # Using the Pokemon API get a Pokemon based on its ID number
-    url = 'https://pokeapi.co/api/v2/pokemon/{}/'.format(pokemon_number)
-    response = requests.get(url)
-    pokemon = response.json()
-    # print(pokemon['name'].title() + '\n' + str(pokemon_number) + '\n' + str(pokemon['height']) + '\n' + str(pokemon['weight']))
-
-    # Create a dictionary that contains the returned Pokemon's name id, height and weight
-    return {
-        'name':pokemon['name'],
-        'id':pokemon['id'],
-        'height':pokemon['height'],
-        'weight':pokemon['weight']
-    }
-
-# Get five random Pokemons for the player to choose
 def get():
+
+    my_score = 0
+    opponent_score = 0
+
     def choose_pokemon():
         for i in range(5):
             get_pokemon = random_pokemon()
@@ -44,7 +29,7 @@ def get():
     # print(url)
     response = requests.get(url)
     my_pokemon = response.json()
-    print("Your pokemon is {} with ID: {}, height: {}, and weight: {}.".format(my_pokemon['name'], my_pokemon['id'], my_pokemon['height'], my_pokemon['weight']))
+    print("Your pokemon is {} with ID: {}, height: {}, and weight: {}.".format(my_pokemon['name'].title(), my_pokemon['id'], my_pokemon['height'], my_pokemon['weight']))
 
     # Get a random pokemon for the opponent
     opponents_pokemon = random_pokemon()
@@ -55,9 +40,32 @@ def get():
 
     # Compare the opponents and players stat
     if my_pokemon[chosen_stat] > opponents_pokemon[chosen_stat]:
-        print('You win!')
+        my_score += 1
+        print('You win this round!')
+        return my_score, opponent_score
     elif my_pokemon[chosen_stat] < opponents_pokemon[chosen_stat]:
-        print('You lose!')
+        opponent_score += 1
+        print('You lose this round!')
+        return my_score, opponent_score
     elif my_pokemon[chosen_stat] == opponents_pokemon[chosen_stat]:
         print('You draw!')
-get()
+        my_score += 1
+        opponent_score += 1
+    return my_score, opponent_score
+
+# Play multiple rounds and record the outcome of each round. The player with most
+# number of rounds won, wins the game.
+
+for score in range(5):
+    total_me, total_opponent = get()
+    total_my_score += total_me
+    total_opponent_score += total_opponent
+    # # total_opponent_score += get(opponent_score)
+    # print(total_my_score, total_opponent_score)
+    print("Your current score is {}. Your opponent's score is {}.".format(total_my_score, total_opponent_score))
+
+# print(total_my_score, total_opponent_score)
+if total_opponent_score > total_my_score:
+    print('You lost to your opponent ({}, {}), better luck next time!'.format(total_my_score, total_opponent_score))
+elif total_opponent_score < total_my_score:
+    print('You won your opponent ({}, {}), well done'.format(total_my_score, total_opponent_score))
