@@ -68,4 +68,28 @@ for score in range(5):
 if total_opponent_score > total_my_score:
     print('You lost to your opponent ({}, {}), better luck next time!'.format(total_my_score, total_opponent_score))
 elif total_opponent_score < total_my_score:
-    print('You won your opponent ({}, {}), well done'.format(total_my_score, total_opponent_score))
+    print('You won your opponent ({}, {}), well done!'.format(total_my_score, total_opponent_score))
+
+# Record high scores for players and store them in a file
+
+def pokemon_file():
+    
+    import csv
+    import os.path
+    field_names = ['My Score', 'Opponent Score']
+    data = [
+        {'My Score': total_my_score, 'Opponent Score': total_opponent_score},
+    ]
+    path = './scores.csv'
+
+    if os.path.exists(path):
+        with open('scores.csv', 'a') as csv_file:
+            spreadsheet = csv.DictWriter(csv_file, fieldnames=field_names)
+            spreadsheet.writerows(data)
+    else:
+        with open('scores.csv', 'w+') as csv_file:
+            spreadsheet = csv.DictWriter(csv_file, fieldnames=field_names)
+            spreadsheet.writeheader()
+            spreadsheet.writerows(data)
+
+pokemon_file()
