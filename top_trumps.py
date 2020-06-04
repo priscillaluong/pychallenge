@@ -9,6 +9,30 @@
 
 # The project will use the Pokemon API
 
+def random_pokemon():
+    # Generate a random number between 1 and 151 to use as the Pokemon ID number
+    import random
+    pokemon_number = random.randint(1, 152)
+    import requests
+    import json
+
+    # Using the Pokemon API get a Pokemon based on its ID number
+    url = 'https://pokeapi.co/api/v2/pokemon/{}/'.format(pokemon_number)
+    response = requests.get(url)
+    pokemon = response.json()
+    # print(pokemon['name'].title() + '\n' + str(pokemon_number) + '\n' + str(pokemon['height']) + '\n' + str(pokemon['weight']))
+
+    # Create a dictionary that contains the returned Pokemon's name id, height and weight
+    return {
+        'name':pokemon['name'],
+        'id':pokemon['id'],
+        'height':pokemon['height'],
+        'weight':pokemon['weight']
+    }
+random_pokemon()
+
+# Get five random Pokemons for the player to choose
+
 total_opponent_score = 0
 total_my_score = 0
 
@@ -25,11 +49,26 @@ def get():
     chosen_pokemon = input('Which pokemon would you like to choose? ')
 
     import requests
-    url = 'https://pokeapi.co/api/v2/pokemon/{}/'.format(chosen_pokemon)
-    # print(url)
-    response = requests.get(url)
-    my_pokemon = response.json()
-    print("Your pokemon is {} with ID: {}, height: {}, and weight: {}.".format(my_pokemon['name'].title(), my_pokemon['id'], my_pokemon['height'], my_pokemon['weight']))
+
+    try:
+        url = 'https://pokeapi.co/api/v2/pokemon/{}/'.format(chosen_pokemon)
+        # print(url)
+        response = requests.get(url)
+        my_pokemon = response.json()
+        print("Your pokemon is {} with ID: {}, height: {}, and weight: {}.".format(my_pokemon['name'].title(), my_pokemon['id'], my_pokemon['height'], my_pokemon['weight']))
+    except ValueError:
+        my_pokemon = random_pokemon()
+        print('You have been given a randomly selected Pokemon: {} with ID: {}, height: {}, and weight: {}.'.format(my_pokemon['name'].title(), my_pokemon['id'], my_pokemon['height'], my_pokemon['weight']))
+
+    # if ValueError:
+    #     my_pokemon = random_pokemon()
+    #     print('You have been given a randomly selected Pokemon: {} with ID: {}, height: {}, and weight: {}.'.format(my_pokemon['name'].title(), my_pokemon['id'], my_pokemon['height'], my_pokemon['weight']))
+    # else:
+    #     url = 'https://pokeapi.co/api/v2/pokemon/{}/'.format(chosen_pokemon)
+    #     # print(url)
+    #     response = requests.get(url)
+    #     my_pokemon = response.json()
+    #     print("Your pokemon is {} with ID: {}, height: {}, and weight: {}.".format(my_pokemon['name'].title(), my_pokemon['id'], my_pokemon['height'], my_pokemon['weight']))
 
     # Get a random pokemon for the opponent
     opponents_pokemon = random_pokemon()
@@ -66,14 +105,14 @@ for score in range(5):
 
 # print(total_my_score, total_opponent_score)
 if total_opponent_score > total_my_score:
-    print('You lost to your opponent ({}, {}), better luck next time!'.format(total_my_score, total_opponent_score))
+    print('You lost to your opponent {}:{}, better luck next time!'.format(total_my_score, total_opponent_score))
 elif total_opponent_score < total_my_score:
-    print('You won your opponent ({}, {}), well done!'.format(total_my_score, total_opponent_score))
+    print('You won your opponent {}:{}, well done!'.format(total_my_score, total_opponent_score))
 
 # Record high scores for players and store them in a file
 
 def pokemon_file():
-    
+
     import csv
     import os.path
     field_names = ['My Score', 'Opponent Score']
